@@ -1,9 +1,11 @@
 data/*
 !data/README.md
-!data/sentiment
 data/sentiment/*
-!data/sqlite
+!data/sentiment/README.md
 data/sqlite/*
+!data/sqlite/README.md
+!**/__init__.py
+!**/README.md
 w2v/
 **/*.csv
 .create_list_of_subbredits.py
