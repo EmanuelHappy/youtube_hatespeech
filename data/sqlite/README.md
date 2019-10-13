@@ -4,11 +4,11 @@ The following sqlite files where created using  `~/scratch/manoelribeiro/helpers
 ```
 Tablename: text
   {id_c: {"likes": likes,
-         "text": text,
-         "is_reply": isreply, 
-         "timestamp": timestamp, 
-         "channel_id": chanel_id, 
-         "category": category}
+          "text": text,
+          "is_reply": isreply, 
+          "timestamp": timestamp, 
+          "channel_id": chanel_id, 
+          "category": category}
 ```
 Where category represents the community name;
 
@@ -24,13 +24,13 @@ The folders created to store the values from empath and perspective have the for
 # ./empath_sqlite/
 Tablename: value
   {id_c: {"size": size,
-         "sadness": empath_value,
-         empath_category_2: empath_value,
-         empath_category_3: empath_value, 
-         .
-         .
-         .
-         empath_category_21: empath_value}}
+          "sadness": empath_value,
+          empath_category_2: empath_value,
+          empath_category_3: empath_value, 
+          .
+          .
+          .
+          empath_category_21: empath_value}}
 ```
 
 ```
