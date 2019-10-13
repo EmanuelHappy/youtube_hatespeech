@@ -1,4 +1,4 @@
-## Sqlite
+# Sqlite
 
 The following sqlite files where created using  `~/scratch/manoelribeiro/helpers/text_dict.sqlite` the main database that has the form:
 ```
