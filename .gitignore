@@ -1,5 +1,9 @@
+data/*
 !data/README.md
-data/
+!data/sentiment
+data/sentiment/*
+!data/sqlite
+data/sqlite/*
 w2v/
 **/*.csv
 .create_list_of_subbredits.py
