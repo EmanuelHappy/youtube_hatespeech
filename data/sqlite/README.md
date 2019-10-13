@@ -21,7 +21,7 @@ Folders created to facilitate the process of get IDs and iterate over the databa
 
 The folders created to store the values from empath and perspective have the form:
 ```
-# Empath
+# ./empath_sqlite/
 Tablename: value
   {id_c: {"size": size},
          {"sadness": empath_value},
@@ -34,7 +34,7 @@ Tablename: value
 ```
 
 ```
-# Perspective
+# ./perspective_sqlite/
 Tablename: value
   {id_c: {{'TOXICITY': perspective_value},
           {'SEVERE_TOXICITY': perspective_value},
