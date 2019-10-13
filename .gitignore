@@ -17,12 +17,14 @@ data/sentiment/ids/*
 data/sentiment/values/*
 !data/sentiment/values_per_year/
 data/sentiment/values_per_year/*
-
+!data/sentiment/community_id/
+data/sentiment/community_id/*
 
 !data/sentiment/dataframes/__init__.py
 !data/sentiment/ids/__init__.py
 !data/sentiment/values/__init__.py
 !data/sentiment/values_per_year/__init__.py
+!data/sentiment/community_id/__init__.py
 
 !data/sqlite/community_texts/
 data/sqlite/community_texts/*
