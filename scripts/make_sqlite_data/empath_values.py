@@ -37,7 +37,6 @@ emotion_list = ['sadness', 'independence', 'positive_emotion', 'family',
 
 def add_empath(db1, db2):
     c = 0
-    
     for id_c, values in db1.items():
         c+=1
         
