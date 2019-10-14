@@ -42,8 +42,8 @@ data/sqlite/split_texts/*
 !data/sqlite/split_texts/__init__.py
 
 tmp_w2v/
-!tmp_w2v/*.py
-
+!tmp_w2v/run_fine_tuning.py
+!tmp_w2v/finetuning_only.py
 
 **/*.csv
 .create_list_of_subbredits.py
