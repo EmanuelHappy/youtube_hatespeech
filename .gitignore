@@ -41,7 +41,10 @@ data/sqlite/split_texts/*
 !data/sqlite/perspective_sqlite/__init__.py
 !data/sqlite/split_texts/__init__.py
 
-w2v/
+tmp_w2v/
+!tmp_w2v/*.py
+
+
 **/*.csv
 .create_list_of_subbredits.py
 create_list_of_subbredits.py
