@@ -1,121 +1,62 @@
-import pandas as pd
-#import cPickle as pickle
 import pickle
-from sqlitedict import SqliteDict
 import numpy as np
-from datetime import datetime
+import argparse
 
-from time import time
+parser = argparse.ArgumentParser(description="""This script creates a new sqlite database,
+                                                based on textblob scores of each youtube comment.""")
 
-name = "Alt-lite"
-"""
-t = time()
-#alt_right = SqliteDict(f"/../../../scratch/manoelribeiro/helpers/text_dict.sqlite", tablename="text", flag="r")
-alt_right = SqliteDict(f"./../Sqlite/split_texts/{name}.sqlite", tablename="value", flag="r")
-ks = {}
-years = []
-c = 0
-for key, value in alt_right.items():
-    if c% 1000000 == 0:
-        print(c)
-    c+=1
-    if c>20000000:
-        break
-    #if value["category"]!='right':
-    #    continue
+parser.add_argument("--src", dest="src", type=str, default="/../../../scratch/manoelribeiro/helpers/text_dict.sqlite",
+                    help="Source folder of the comments.")
 
-    ks[key] = datetime.fromtimestamp(value["timestamp"]//1000).year
-    #ks[key] = value["timestamp"]
-print(time()-t)
+parser.add_argument("--dst", dest="dst", type=str, default="./../sentiment/empath/sqlite/empath_value.sqlite",
+                    help="Where to save the output files.")
 
-#alt_right.close()
+parser.add_argument("--name", dest="name", type=str, default="IDW",
+                    help="Name of the community to create textblob files")
 
-with open(f'{name}.pickle', 'wb') as handle:
-    pickle.dump(ks, handle, protocol=pickle.HIGHEST_PROTOCOL)
-print("pickle")
-exit()
-"""
-with open(f"{name}.pickle", "rb") as fp:
-    ks = pickle.load(fp)
+args = parser.parse_args()
 
-d_pol={2006:[], 2007:[], 2008:[], 2009:[], 2010:[], 2011:[], 2012:[], 2013:[], 2014:[], 2015:[], 2016:[], 2017:[], 2018:[], 2019:[]}
-d_subj={2006:[], 2007:[], 2008:[], 2009:[], 2010:[], 2011:[], 2012:[], 2013:[], 2014:[], 2015:[], 2016:[], 2017:[], 2018:[], 2019:[]}
-filenames = ["3_10000000", "4_10000000", "5_10000000", "6_10000000", "7_4989623"]
 
-for fname in filenames:
-    with open(f"blobm_{fname}_subj", "rb") as fp:
-        subj = pickle.load(fp)
-    print("subj")
-    with open(f"blobm_{fname}_pol", "rb") as fp:
-        pol = pickle.load(fp)
-    print("pol")
-    with open(f"blobm_{fname}_id_list", "rb") as fp:
-        ide = pickle.load(fp)   
-    print("id")
+def make_values_by_year(name):
+    with open(f"{name}.pickle", "rb") as fp:
+        ks = pickle.load(fp)
 
-    for i in range(len(pol)):
-        if i%1000000==0:
-            print(i)
-        key = ide[i]
-        if key in ks:
-            #dt_object = datetime.fromtimestamp(ks[key]//1000)
-            d_pol[ks[key]].append(pol[i])
-            d_subj[ks[key]].append(subj[i])
-        
-    print(fname, len(d_pol[2018]))
+    d_pol = {}
+    d_subj = {}
+    for year in range(2006, 2020):
+        d_pol[year] = []
+        d_subj[year] = []
 
-for i in range(2007, 2020):
-    print(i)
-    with open(f"{name}_pol_{i}", "wb") as f:
-        pickle.dump(tuple(np.array(d_pol[i])), f, protocol=4)
-    with open(f"{name}_subj_{i}", "wb") as f:
-        pickle.dump(tuple(np.array(d_subj[i])), f, protocol=4)
-                    
-"""
-with open("blobm_3_10000000_subj", "rb") as fp:
-    subj4 = pickle.load(fp)
-print("subj")
-with open("blobm_3_10000000_id_list", "rb") as fp:
-    id4 = pickle.load(fp)   
-    
-print("id")
-d_pol={2006:[], 2007:[], 2008:[], 2009:[], 2010:[], 2011:[], 2012:[], 2013:[], 2014:[], 2015:[], 2016:[], 2017:[], 2018:[], 2019:[]}
-d_subj={2006:[], 2007:[], 2008:[], 2009:[], 2010:[], 2011:[], 2012:[], 2013:[], 2014:[], 2015:[], 2016:[], 2017:[], 2018:[], 2019:[]}
-for i in range(len(subj4)):
-    if i%1000000==0:
+    filenames = ["0", "1_10000000", "2_10000000", "3_10000000", "4_10000000", "5_10000000", "6_10000000", "7_4989623"]
+
+    for fname in filenames:
+        with open(f"blob_{fname}_subj", "rb") as fp:
+            subj = pickle.load(fp)
+        print("subj")
+        with open(f"blob_{fname}_pol", "rb") as fp:
+            pol = pickle.load(fp)
+        print("pol")
+        with open(f"blob_{fname}_id_list", "rb") as fp:
+            ide = pickle.load(fp)
+        print("id")
+
+        for i in range(len(pol)):
+            if i % 1000000 == 0:
+                print(i)
+            key = ide[i]
+            if key in ks:
+                d_pol[ks[key]].append(pol[i])
+                d_subj[ks[key]].append(subj[i])
+
+        print(fname, len(d_pol[2018]))
+
+    for i in range(2007, 2020):
         print(i)
-    key = id4[i]
-    if key in ks:
-        #dt_object = datetime.fromtimestamp(ks[key]//1000)
-        #d_pol[ks[key]].append(pol4[i])
-        #d_subj[ks[key]].append(subj4[i])
-        #d_pol[dt_object.year].append(pol4[i])
-        d_subj[ks[key]].append(subj4[i])
-        
-print(4, len(d_subj[2019]))
+        with open(f"{name}_pol_{i}", "wb") as f:
+            pickle.dump(tuple(np.array(d_pol[i])), f, protocol=4)
+        with open(f"{name}_subj_{i}", "wb") as f:
+            pickle.dump(tuple(np.array(d_subj[i])), f, protocol=4)
 
-with open("blobm_4_10000000_subj", "rb") as fp:
-    subj4 = pickle.load(fp)
-print("subj")
-with open("blobm_4_10000000_id_list", "rb") as fp:
-    id4 = pickle.load(fp)    
-print("id")
 
-for i in range(len(subj4)):
-    if i%1000000==0:
-        print(i)
-    key = id4[i]
-    if key in ks:
-        #dt_object = datetime.fromtimestamp(ks[key]//1000)
-        #d_pol[ks[key]].append(pol4[i])
-        #d_subj[ks[key]].append(subj4[i])
-        #d_pol[dt_object.year].append(pol4[i])
-        d_subj[ks[key]].append(subj4[i])
-        
-print(3, len(d_subj[2019]))
-
-for i in range(2007, 2020):
-    print(i)
-    with open(f"{name}_subj_{i}", "wb") as f:
-        pickle.dump(tuple(np.array(d_subj[i])), f, protocol=4)
-"""
+if __name__ == "__main__":
+    make_values_by_year(args.name)
