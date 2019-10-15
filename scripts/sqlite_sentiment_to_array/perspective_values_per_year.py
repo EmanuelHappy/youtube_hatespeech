@@ -7,21 +7,24 @@ from time import time
 parser = argparse.ArgumentParser(description="""This script creates a new sqlite database,
                                                 based on perspective scores of each youtube comment.""")
 
-parser.add_argument("--src", dest="src", type=str, default="/../../../scratch/manoelribeiro/helpers/text_dict.sqlite",
-                    help="Source folder of the comments.")
+parser.add_argument("--src", dest="src", type=str, default="./../../data/sqlite/perspective_sqlite/",
+                    help="Sqlite DataBase source of the comments.")
 
-parser.add_argument("--dst", dest="dst", type=str, default="./../sentiment/empath/sqlite/empath_value.sqlite",
-                    help="Where to save the output files.")
+parser.add_argument("--dst", dest="dst", type=str, default="./../../data/sentiment/values_per_year/perspective/",
+                    help="Sqlite DataBase to store the perspective values.")
 
 parser.add_argument("--name", dest="name", type=str, default="IDW",
                     help="Name of the community to create perspective files")
 
 args = parser.parse_args()
 
+middle_path = "./../../data/sentiment/"
+community_path = "./../../data/sentiment/community_id/"
+
 
 def sqlite_to_array(num):
 
-    p2 = SqliteDict(f"./perspective/perspective_value{num}.sqlite", tablename="value", flag="r")
+    p2 = SqliteDict(f"{args.src}perspective_value{num}.sqlite", tablename="value", flag="r")
 
     c = 0
     t_ini = time()
@@ -46,16 +49,16 @@ def sqlite_to_array(num):
 
 def save_arrays(num, perspective, ids, c):
     print(":D")
-    with open(f"./perspective/perspective_{num}_{c}_val", "wb") as f:
+    with open(f"{middle_path}values/perspective_val/perspective_{num}_{c}_val", "wb") as f:
         pickle.dump(np.array(perspective), f, protocol=4)
     print("Val")
-    with open(f"./perspective/perspective_{num}_{c}_id", "wb") as f:
+    with open(f"{middle_path}ids/perspective_id/perspective_{num}_{c}_id", "wb") as f:
         pickle.dump(tuple(np.array(ids)), f, protocol=4)
     print("ID")
 
 
 def make_values_by_year(name):
-    with open(f"{name}.pickle", "rb") as fp:
+    with open(f"{community_path}{name}.pickle", "rb") as fp:
         ks = pickle.load(fp)
 
     d_persp = {}
@@ -68,10 +71,10 @@ def make_values_by_year(name):
                  "7.1_3859623"]
 
     for fname in filenames:
-        with open(f"./perspective/perspective_{fname}_val", "rb") as fp:
+        with open(f"{middle_path}values/perspective_val/perspective_{fname}_val", "rb") as fp:
             perspective = pickle.load(fp)
         print("perspective")
-        with open(f"./perspective/perspective_{fname}_id", "rb") as fp:
+        with open(f"{middle_path}ids/perspective_id/perspective_{fname}_id", "rb") as fp:
             ide = pickle.load(fp)
         print("id")
 
@@ -86,7 +89,7 @@ def make_values_by_year(name):
 
     for i in range(2007, 2020):
         print(i)
-        with open(f"./perspective/{name}1_perspective_{i} ", "wb") as f:
+        with open(f"{args.dst}{name}_perspective_{i} ", "wb") as f:
             pickle.dump(tuple(np.array(d_persp[i])), f, protocol=4)
 
 

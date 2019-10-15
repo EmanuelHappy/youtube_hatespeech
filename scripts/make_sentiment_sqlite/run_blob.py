@@ -4,11 +4,13 @@ import os
 parser = argparse.ArgumentParser(description="""This script creates a new sqlite database,
                                                 based on text_blob scores of each youtube comment.""")
 
-parser.add_argument("--src", dest="src", type=str, default="/../../../scratch/manoelribeiro/helpers/text_dict.sqlite",
-                    help="Source folder of the comments.")
+parser.add_argument("--src", dest="src", type=str, default="/../../../../../scratch/manoelribeiro/helpers/"
+                                                           "text_dict.sqlite",
+                    help="Sqlite DataBase source of the comments.")
 
-parser.add_argument("--dst", dest="dst", type=str, default="./../sentiment/text_blob/data/",
-                    help="Where to save the output files.")
+parser.add_argument("--dst", dest="dst", type=str, default="./../../data/sqlite/sentiment/perspective/data/sqlite/"
+                                                           "perspective_sqlite/perspective_value.sqlite",
+                    help="Sqlite DataBase to store the perspective values.")
 
 parser.add_argument("--pgm", dest="program", type=str, default="blobtext.py",
                     help="Where to save the output files.")

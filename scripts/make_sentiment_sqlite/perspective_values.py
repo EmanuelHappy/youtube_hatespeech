@@ -14,11 +14,12 @@ from sqlitedict import SqliteDict
 parser = argparse.ArgumentParser(description="""This script creates a new sqlite database,
                                                 based on perspective API scores of each youtube comment.""")
 
-parser.add_argument("--src", dest="src", type=str, default="/../../../scratch/manoelribeiro/helpers/text_dict.sqlite",
+parser.add_argument("--src", dest="src", type=str, default="/../../../../../scratch/manoelribeiro/helpers/"
+                                                           "text_dict.sqlite",
                     help="Sqlite DataBase source of the comments.")
 
-parser.add_argument("--dst", dest="dst", type=str, default="./../sentiment/perspective/data/sqlite/"
-                                                           "perspective_value.sqlite",
+parser.add_argument("--dst", dest="dst", type=str, default="./../../data/sqlite/sentiment/perspective/data/sqlite/"
+                                                           "perspective_sqlite/perspective_value.sqlite",
                     help="Sqlite DataBase to store the perspective values.")
 
 parser.add_argument("--init", dest="init", type=int, default="0",
@@ -29,7 +30,7 @@ parser.add_argument("--end", dest="end", type=int, default="-1",
 
 parser.add_argument("--loop", dest="loop", type=int, default="1",
                     help="Number of loops that perspective will be called."
-                         "Correct: (end-init) / loop == 10000")
+                         "Correct: (end-init) / loop <= 10000")
 
 args = parser.parse_args()
 

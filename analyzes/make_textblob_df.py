@@ -8,6 +8,9 @@ names = ["Alt-right", "IDW", "Alt-lite", "control"]
 names_list_list = [["Alt-right"], ["IDW"], ["Alt-lite"], names_control]
 cat = ["pol", "subj"]
 
+src_path = "./../data/sentiment/values_per_year/textblob/"
+dst_path = "./../data/sentiment/dataframes/text_blob_df/"
+
 for names_list in names_list_list:
     print(names_list)
     for blob in cat:
@@ -20,7 +23,7 @@ for names_list in names_list_list:
 
             for name in names_list:
                 try:
-                    with open(f"{name}_{blob}_{year}", "rb") as fp:
+                    with open(f"{src_path}{name}_{blob}_{year}", "rb") as fp:
                         y1 = pickle.load(fp)
                         y2 = np.concatenate((y2, np.array(y1)), axis=None)
                 except:
@@ -44,4 +47,4 @@ for names_list in names_list_list:
             dyu.append(c[1])
 
         df = pd.DataFrame({"x": x, "y": y_mean, "dyd": dyd, "dyu": dyu, "std": y_std})
-        df.to_csv(f"./bootstrap/{names[names_list_list.index(names_list)]}_{blob}.csv")
+        df.to_csv(f"{dst_path}{names[names_list_list.index(names_list)]}_{blob}.csv")

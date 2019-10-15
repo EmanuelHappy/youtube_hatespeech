@@ -10,6 +10,9 @@ emotion_list = ['size', 'sadness', 'independence', 'positive_emotion', 'family',
                 'love', 'ridicule', 'masculine', 'feminine', 'violence', 'suffering', 'dispute', 'anger', 'envy',
                 'work', 'politics', 'terrorism', 'shame', 'confusion', 'hate']
 
+src_path = "./../data/sentiment/values_per_year/empath/"
+dst_path = "./../data/sentiment/dataframes/empath_df/"
+
 for names_list in names_list_list:
     print(names_list)
     y = []
@@ -22,7 +25,7 @@ for names_list in names_list_list:
 
         for name in names_list:
             try:
-                with open(f"{name}_empath_{year}", "rb") as fp:
+                with open(f"{src_path}{name}_empath_{year}", "rb") as fp:
                     y1 = pickle.load(fp)
                     if y2.size == 0:
                         y2 = np.array(y1)
@@ -63,4 +66,4 @@ for names_list in names_list_list:
             d[f"{emotion_list[i]}_dyd"].append(dyd[j][i])
 
     df = pd.DataFrame(d)
-    df.to_csv(f"./empath/{names[names_list_list.index(names_list)]}_empath.csv")
+    df.to_csv(f"{dst_path}{names[names_list_list.index(names_list)]}_empath.csv")

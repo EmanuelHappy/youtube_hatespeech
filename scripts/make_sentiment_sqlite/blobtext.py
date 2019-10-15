@@ -11,10 +11,10 @@ from textblob import TextBlob
 
 parser = argparse.ArgumentParser(description="""This script creates pickle objects to store text_blob values.""")
 
-parser.add_argument("--src", dest="src", type=str, default="/../../../scratch/manoelribeiro/helpers/text_dict.sqlite",
+parser.add_argument("--src", dest="src", type=str, default='./../../data/sqlite/split_texts/',
                     help="Source folder of the comments.")
 
-parser.add_argument("--dst", dest="dst", type=str, default="./../sentiment/text_blob/data/",
+parser.add_argument("--dst", dest="dst", type=str, default="./../../data/sentiment/",
                     help="Where to save the output files.")
 
 parser.add_argument("--init", dest="init", type=int, default="0",
@@ -73,14 +73,14 @@ def add_blob(db1, j):
         if c == args.end:
             break
 
-    with open(f"{args.dst}_{j}_{c}_pol", "wb") as f:
+    with open(f"{args.dst}values/textblob_pol_val/blob_{j}_{c}_pol", "wb") as f:
         pickle.dump(tuple(pol), f, protocol=4)
-    with open(f"{args.dst}_{j}_{c}_subj", "wb") as f:
+    with open(f"{args.dst}values/textblob_subj_val/blob_{j}_{c}_subj", "wb") as f:
         pickle.dump(tuple(subj), f, protocol=4)
-    with open(f"{args.dst}_{j}_{c}_id_list", "wb") as f:
+    with open(f"{args.dst}ids/textblob_id/blob_{j}_{c}_id_list", "wb") as f:
         pickle.dump(tuple(id_list), f, protocol=4)
     df = pd.DataFrame({'id': id_list, 'polarity': pol, "subjective": subj})
-    df.to_pickle(f"{args.dst}_{j}_{c}.csv")
+    df.to_pickle(f"./../../data/tmp/textblob_csv/blob_{j}_{c}.csv")
 
     del text_list, id_list
 
@@ -92,7 +92,7 @@ if __name__ == '__main__':
     time_init = time()
     for num in splits:
         print(num)
-        dict_c = SqliteDict(f"./split_texts/text_dict_{num}.sqlite", tablename="value", flag="r")
+        dict_c = SqliteDict(f"{args.src}text_dict_{num}.sqlite", tablename="value", flag="r")
         add_blob(dict_c, num//10000000)
         print(f"{num} finished at {time()-time_init}")
     

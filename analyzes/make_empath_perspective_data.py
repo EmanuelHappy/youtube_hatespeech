@@ -13,6 +13,13 @@ emotion_list = ['size', 'sadness', 'independence', 'positive_emotion', 'family',
 attributes = ['TOXICITY', 'SEVERE_TOXICITY', 'IDENTITY_ATTACK', 'INSULT',
               'PROFANITY', 'THREAT', 'SEXUALLY_EXPLICIT', 'FLIRTATION']
 
+middle_path = "./../data/sentiment/"
+community_path = middle_path + "community_id/"
+df_path = middle_path + "dataframes/empath_perspective_df/"
+id_path = middle_path + "ids/perspective_id/"
+val_path = middle_path + "values/perspective_val/"
+values_path = middle_path + "values_per_year/empath_blob/"
+
 
 def make_df():
     filenames = ["0_5000000", "0_10000000", "0_15000000", "0_20000001", "2?2_285042", "2?3_887730", "2?4_6000000",
@@ -25,9 +32,9 @@ def make_df():
         print(fname)
         p2 = []
         id2 = []
-        with open(f"./perspective/perspective_{fname}_val", "rb") as fp:
+        with open(f"{val_path}perspective_{fname}_val", "rb") as fp:
             persp1 = pickle.load(fp)
-        with open(f"./perspective/perspective_{fname}_id", "rb") as fp:
+        with open(f"{id_path}perspective_{fname}_id", "rb") as fp:
             ide1 = pickle.load(fp)
         ide1 = np.array(ide1)
         for i in range(len(persp1)):
@@ -58,7 +65,7 @@ def make_df():
                 for i in range(2010, 2020):
                     y1 = []
 
-                    with open(f"./empath_blob/{name}_empath_{emotion}_{i}", "rb") as f:
+                    with open(f"{values_path}{name}_empath_{emotion}_{i}", "rb") as f:
                         keys = pickle.load(f)
 
                     for key in keys:
@@ -88,7 +95,7 @@ def make_df():
                 d[f"{emotion}_std"] = y_std
 
             df = pd.DataFrame(d)
-            df.to_csv(f"./empath_perspective/{name}_{attributes[attri]}_empath.csv")
+            df.to_csv(f"{df_path}{name}_{attributes[attri]}_empath.csv")
 
 
 if __name__ == "__main__":

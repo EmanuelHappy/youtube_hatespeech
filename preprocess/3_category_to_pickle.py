@@ -2,9 +2,11 @@ from sqlitedict import SqliteDict
 from datetime import datetime
 import pickle
 
+source = "./../data/sqlite/community_texts/"
+path = "./../data/sentiment/community_id/"
 names_list = ["right-center", "Alt-right", "center", "right", "left", "left-center", "IDW", "Alt-lite"]
 for name in names_list:
-    community = SqliteDict(f"./../Sqlite/split_texts/{name}.sqlite", tablename="value", flag="r")
+    community = SqliteDict(f"{source}{name}.sqlite", tablename="value", flag="r")
     ks = {}
     c = 0
     for key, value in community.items():
@@ -14,6 +16,6 @@ for name in names_list:
 
         ks[key] = datetime.fromtimestamp(value["timestamp"]//1000).year
 
-    with open(f'{name}.pickle', 'wb') as handle:
+    with open(f'{path}{name}.pickle', 'wb') as handle:
         pickle.dump(ks, handle, protocol=pickle.HIGHEST_PROTOCOL)
     print("pickle")

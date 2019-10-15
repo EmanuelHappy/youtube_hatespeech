@@ -12,6 +12,11 @@ emotion_list = ['size', 'sadness', 'independence', 'positive_emotion', 'family',
                 'dispute', 'anger', 'envy', 'work', 'politics',
                 'terrorism', 'shame', 'confusion', 'hate']
 
+middle_path = "./../data/sentiment/"
+community_path = middle_path + "community_id/"
+df_path = middle_path + "dataframes/empath_blob_df/"
+values_path = middle_path + "values_per_year/empath_blob/"
+
 
 def get_ids():
     for names_list in names_list_list:
@@ -22,16 +27,16 @@ def get_ids():
                 d_empath[emotion][year] = []
 
         for name in names_list:
-            with open(f"{name}.pickle", "rb") as fp:
+            with open(f"{community_path}{name}.pickle", "rb") as fp:
                 ks = pickle.load(fp)
 
             filenames = ["1_4600000", "2_4600000", "3_2400002", "4_3000002", "5_1000001", "6_10000000", "6_20000000",
                          "6_30000000", "6_40000000", "6_50000000", "6_53900001"]
             for fname in filenames:
-                with open(f"empath_{fname}_val", "rb") as fp:
+                with open(f"{middle_path}values/empath_val/empath_{fname}_val", "rb") as fp:
                     empath = pickle.load(fp)
                 print("perspective")
-                with open(f"empath_{fname}_id", "rb") as fp:
+                with open(f"{middle_path}ids/empath_id/empath_{fname}_id", "rb") as fp:
                     ide = pickle.load(fp)
                 print("id")
 
@@ -49,7 +54,7 @@ def get_ids():
 
         for emotion in emotion_list:
             for year in range(2007, 2020):
-                with open(f"./empath/{names[names_list_list.index(names_list)]}_empath_{emotion}_{year}", "wb") as fp:
+                with open(f"{values_path}{names[names_list_list.index(names_list)]}_empath_{emotion}_{year}", "wb") as fp:
                     pickle.dump(d_empath[emotion][year], fp, protocol=4)
 
 
@@ -61,10 +66,10 @@ def make_df():
 
     for fname in filenames:
 
-        with open(f"blob_{fname}_pol", "rb") as fp:
+        with open(f"{middle_path}values/textblob_pol_val/blob_{fname}_pol", "rb") as fp:
             pol1 = pickle.load(fp)
         print("pol")
-        with open(f"blob_{fname}_id", "rb") as fp:
+        with open(f"{middle_path}/ids/textblob_id/blob_{fname}_id", "rb") as fp:
             ide1 = pickle.load(fp)
 
         ide.extend(ide1)
@@ -87,7 +92,7 @@ def make_df():
 
             for i in range(2007, 2020):
                 y1 = []
-                with open(f"./empath_blob/{name}_empath_{emotion}_{i}", "rb") as f:
+                with open(f"{values_path}{name}_empath_{emotion}_{i}", "rb") as f:
                     keys = pickle.load(f)
                 for key in keys:
                     if key in d_pol:
@@ -117,7 +122,7 @@ def make_df():
         d["year"] = [i for i in range(2007, 2020)]
 
         df = pd.DataFrame(d)
-        df.to_csv(f"./empath_blob/{name}_pol_empath_prop_boots.csv")
+        df.to_csv(f"{df_path}{name}_pol_empath_prop_boots.csv")
 
 
 if __name__ == "__main__":

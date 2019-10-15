@@ -7,20 +7,23 @@ import argparse
 parser = argparse.ArgumentParser(description="""This script creates a new sqlite database,
                                                 based on empath scores of each youtube comment.""")
 
-parser.add_argument("--src", dest="src", type=str, default="/../../../scratch/manoelribeiro/helpers/text_dict.sqlite",
-                    help="Source folder of the comments.")
+parser.add_argument("--src", dest="src", type=str, default="./../../data/sqlite/empath_sqlite/",
+                    help="Sqlite DataBase source of the comments.")
 
-parser.add_argument("--dst", dest="dst", type=str, default="./../sentiment/empath/sqlite/empath_value.sqlite",
-                    help="Where to save the output files.")
+parser.add_argument("--dst", dest="dst", type=str, default="./../../data/sentiment/values_per_year/empath/",
+                    help="Sqlite DataBase to store the empath values.")
 
 parser.add_argument("--name", dest="name", type=str, default="IDW",
                     help="Name of the community to create empath files")
 
 args = parser.parse_args()
 
+middle_path = "./../../data/sentiment/"
+community_path = "./../../data/sentiment/community_id/"
+
 
 def sqlite_to_array(num):
-    emp_sql = SqliteDict(f"empath_value{num}.sqlite", tablename="value", flag="r")
+    emp_sql = SqliteDict(f"{args.src}empath_value{num}.sqlite", tablename="value", flag="r")
     t_ini = time()
     ids = []
     emp_values = []
@@ -39,21 +42,21 @@ def sqlite_to_array(num):
             ids = []
             emp_values = []
 
-    save_arrays(emp_values, ids, c)
+    save_arrays(num, emp_values, ids, c)
 
 
-def save_arrays(emp_values, emp_ids, count):
+def save_arrays(num, emp_values, emp_ids, count):
     print(":D")
-    with open(f"empath_6_{count}_val", "wb") as f:
+    with open(f"{middle_path}values/empath_val/empath_{num}_{count}_val", "wb") as f:
         pickle.dump(np.array(emp_values), f, protocol=4)
     print("Val")
-    with open(f"empath_6_{count}_id", "wb") as f:
+    with open(f"{middle_path}ids/empath_id/empath_{num}_{count}_id", "wb") as f:
         pickle.dump(tuple(np.array(emp_ids)), f, protocol=4)
     print("ID")
 
 
 def make_values_by_year(name):
-    with open(f"{name}.pickle", "rb") as fp:
+    with open(f"{community_path}{name}.pickle", "rb") as fp:
         ks = pickle.load(fp)
 
     d_emp = {}
@@ -64,10 +67,10 @@ def make_values_by_year(name):
                  "6_30000000", "6_40000000", "6_50000000", "6_53900001"]
 
     for fname in filenames:
-        with open(f"empath_{fname}_val", "rb") as fp:
+        with open(f"{middle_path}values/empath_val/empath_{fname}_val", "rb") as fp:
             empath = pickle.load(fp)
         print("perspective")
-        with open(f"empath_{fname}_id", "rb") as fp:
+        with open(f"{middle_path}ids/empath_id/empath_{fname}_id", "rb") as fp:
             ide = pickle.load(fp)
         print("id")
 
@@ -82,7 +85,7 @@ def make_values_by_year(name):
 
     for i in range(2007, 2020):
         print(i)
-        with open(f"{name}_empath_{i}", "wb") as f:
+        with open(f"{args.dst}{name}_empath_{i}", "wb") as f:
             pickle.dump(tuple(np.array(d_emp[i])), f, protocol=4)
 
 

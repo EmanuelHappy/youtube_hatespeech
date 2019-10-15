@@ -11,10 +11,11 @@ lexicon = Empath()
 parser = argparse.ArgumentParser(description="""This script creates a new sqlite database,
                                                 based on empath scores of each youtube comment.""")
 
-parser.add_argument("--src", dest="src", type=str, default="/../../../scratch/manoelribeiro/helpers/text_dict.sqlite",
+parser.add_argument("--src", dest="src", type=str, default="/../../../../../scratch/manoelribeiro/helpers/"
+                                                           "text_dict.sqlite",
                     help="Source folder of the comments.")
 
-parser.add_argument("--dst", dest="dst", type=str, default="./../sentiment/empath/sqlite/empath_value.sqlite",
+parser.add_argument("--dst", dest="dst", type=str, default="./../../data/sqlite/empath_sqlite/empath_value",
                     help="Where to save the output files.")
 
 parser.add_argument("--init", dest="init", type=int, default="0",

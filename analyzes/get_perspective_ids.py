@@ -7,6 +7,12 @@ names_list_list = [["Alt-right"], ["IDW"], ["Alt-lite"], names_control]
 attributes = ['TOXICITY', 'SEVERE_TOXICITY', 'IDENTITY_ATTACK', 'INSULT', 'PROFANITY', 'THREAT', 'SEXUALLY_EXPLICIT',
               'FLIRTATION']
 
+middle_path = "./../data/sentiment/"
+community_path = middle_path + "community_id/"
+id_path = middle_path + "ids/perspective_id/"
+val_path = middle_path + "values/perspective_val/"
+dst_path = middle_path + "values_per_year/perspective_attr/"
+
 
 def get_ids():
     c = 0
@@ -18,7 +24,7 @@ def get_ids():
                 d_persp[attr][year] = []
         for name in names:
             print(name)
-            with open(f"{name}.pickle", "rb") as fp:
+            with open(f"{community_path}{name}.pickle", "rb") as fp:
                 ks = pickle.load(fp)
 
             filenames = ["0_5000000", "0_10000000_", "0_15000000", "0_20000000", "0_20369999", "1_3626600", "2_2390000",
@@ -27,10 +33,10 @@ def get_ids():
                          "6.1_2858690", "6.2_6109999", "7.1_3859623"]
 
             for fname in filenames:
-                with open(f"./perspective/perspective_{fname}_val", "rb") as fp:
+                with open(f"{val_path}perspective_{fname}_val", "rb") as fp:
                     perspective = pickle.load(fp)
                 print("perspective")
-                with open(f"./perspective/perspective_{fname}_id", "rb") as fp:
+                with open(f"{id_path}perspective_{fname}_id", "rb") as fp:
                     ide = pickle.load(fp)
                 print("id")
 
@@ -56,7 +62,7 @@ def get_ids():
 
         for attr in attributes:
             for year in range(2010, 2020):
-                with open(f"./perspective_blob/{names_list[c]}_{attr}_{year}", "wb") as fp:
+                with open(f"{dst_path}{names_list[c]}_{attr}_{year}", "wb") as fp:
                     pickle.dump(d_persp[attr][year], fp, protocol=4)
         c += 1
 

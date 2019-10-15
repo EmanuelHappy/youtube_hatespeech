@@ -9,6 +9,8 @@ names_list_list = [["Alt-right"], ["IDW"], ["Alt-lite"], names_control]
 
 attributes = ['TOXICITY', 'SEVERE_TOXICITY', 'IDENTITY_ATTACK', 'INSULT', 'PROFANITY', 'THREAT', 'SEXUALLY_EXPLICIT',
               'FLIRTATION']
+src_path = "./../data/sentiment/values_per_year/perspective/"
+dst_path = "./../data/sentiment/dataframes/perspective_df/"
 
 for names_list in names_list_list:
     print(names_list)
@@ -23,7 +25,7 @@ for names_list in names_list_list:
 
         for name in names_list:
             try:
-                with open(f"./perspective/{name}_perspective_{year}", "rb") as fp:
+                with open(f"{src_path}{name}_perspective_{year}", "rb") as fp:
                     y1 = pickle.load(fp)
                     y3 = []
                 for i in y1:
@@ -71,4 +73,4 @@ for names_list in names_list_list:
             d[f"{attributes[i]}_dyd"].append(dyd[j][i])
 
     df = pd.DataFrame(d)
-    df.to_csv(f"./perspective/{names[names_list_list.index(names_list)]}_perspective.csv")
+    df.to_csv(f"{dst_path}{names[names_list_list.index(names_list)]}_perspective.csv")
