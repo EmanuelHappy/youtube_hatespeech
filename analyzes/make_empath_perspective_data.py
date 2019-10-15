@@ -1,7 +1,7 @@
 import pandas as pd
 import pickle
 import numpy as np
-from .bootstrap import bootstrap
+from analyzes.utilities.bootstrap import bootstrap
 
 names_control = ["right-center", "center", "left", "left-center", "right1", "right2"]
 names_list = ["control"]

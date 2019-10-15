@@ -35,6 +35,7 @@ emotion_list = ['sadness', 'independence', 'positive_emotion', 'family',
                 'dispute', 'anger', 'envy', 'work', 'politics',
                 'terrorism', 'shame', 'confusion', 'hate']
 
+
 def multi_process(text):
     d = dict()
     d['lenght'] = len(text.split())
@@ -43,6 +44,7 @@ def multi_process(text):
         d[emotion] = a[emotion]        
     
     return d
+
 
 def add_empath(db1, db2):
     c = 0
@@ -95,5 +97,3 @@ if __name__ == '__main__':
     
     time_end = time()
     print(f"Time to finish the analysis: {round((time_end-time_init) / 60, 2)}")
-
-    

@@ -1,6 +1,5 @@
 import pickle
 import numpy as np
-import itertools
 import argparse
 from sqlitedict import SqliteDict
 from time import time
@@ -28,9 +27,8 @@ def sqlite_to_array(num):
     t_ini = time()
     ids = []
     perspective = []
-    to_request = [(k, v) for k, v in itertools.islice(p2.items(), 15000001, 20000001)]
 
-    for key, value in to_request:
+    for key, value in p2.items():
         if c % 100000 == 0:
             print("iteration number ", c, "at", round((time()-t_ini)/60, 2), "minutes")
         c += 1

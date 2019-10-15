@@ -147,7 +147,7 @@ if __name__ == '__main__':
     value_dict = SqliteDict(args.dst, tablename="value", journal_mode="OFF")
 
     # Initiating multi-process pool:
-    workers = 50  # The number 20 was chosen because it best fit the # of requests/second
+    workers = 50
     p = Pool(workers, initializer=initialize_worker)
     
     time_init = time()
