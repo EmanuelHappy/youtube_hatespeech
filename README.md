@@ -1,6 +1,6 @@
 # Youtube Hate Speech
 
-This folder contains the data of my first research
+This repository contains the data and the analysis of my first research
 
 ## Folder structure
 - `./preprocess/` splits the sqlite to be easier to deal with it
