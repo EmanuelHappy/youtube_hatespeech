@@ -28,3 +28,7 @@ def bootstrap(data, n=1000, func=np.mean):
         return simulations[l_indx], simulations[u_indx]
 
     return ci
+
+
+if __name__ == "__main__":
+    print("main")
