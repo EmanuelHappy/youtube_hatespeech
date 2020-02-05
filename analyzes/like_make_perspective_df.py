@@ -1,10 +1,9 @@
 import pickle
 import numpy as np
 import pandas as pd
-from bootstrap import bootstrap
+from utilities.bootstrap import bootstrap
 
 names_control = ["right-center", "center", "left", "left-center", "right"]
-
 names = ["Alt-right", "IDW", "Alt-lite", "control"]
 names_list_list = [["Alt-right"], ["IDW"], ["Alt-lite"], names_control]
 bins_like_name = ["0", "1", "2-5", "6-100", "100"]
@@ -16,6 +15,8 @@ dst_path = "./../data/sentiment/dataframes/perspective_df/like/"
 
 for like_name in bins_like_name:
     for names_list in names_list_list:
+        if like_name=='0' and (names_list ==['Alt-right'] or names_list==['IDW']):
+            continue
         print(names_list, like_name)
         y = []
         x = bins_t_s
@@ -23,13 +24,12 @@ for like_name in bins_like_name:
         dyd = []
 
         for year in bins_t_s:
+
             y2 = np.array([[]])
             print(year)
 
             for name in names_list:
                 print(name)
-                if like_name == "0" and name == "right":
-                    continue
                 with open(f"{src_path}{name}{like_name}_perspective_{year} ", "rb") as fp:
                     y1 = pickle.load(fp)
                     y3 = []
@@ -50,6 +50,11 @@ for like_name in bins_like_name:
             print(y2[:, 0].shape)
 
             for i in range(8):
+                if i not in [0, 1, 2]:
+                    dyd_year.append(y[-1][i])
+                    dyu_year.append(y[-1][i])
+                    continue
+
                 boot = bootstrap(y2[:, i])
                 c = boot(.95)
                 print(c)
@@ -76,5 +81,5 @@ for like_name in bins_like_name:
                 d[f"{attributes[i]}_dyd"].append(dyd[j][i])
 
         df = pd.DataFrame(d)
-        df.to_csv(f"{dst_path}{names[names_list_list.index(names_list)]}{like_name}_perspective_new.csv")
+        df.to_csv(f"{dst_path}{names[names_list_list.index(names_list)]}{like_name}_perspective.csv")
 

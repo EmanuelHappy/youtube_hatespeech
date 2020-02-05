@@ -1,7 +1,7 @@
 import pickle
 import numpy as np
 import pandas as pd
-from bootstrap import bootstrap
+from utilities.bootstrap import bootstrap
 
 names_control = ["right-center", "center", "left", "left-center", "right"]
 names = ["Alt-right", "IDW", "Alt-lite", "control"]
@@ -9,6 +9,7 @@ names_list_list = [["Alt-right"], ["IDW"], ["Alt-lite"], names_control]
 emotion_list = ['size', 'sadness', 'independence', 'positive_emotion', 'family', 'negative_emotion', 'government',
                 'love', 'ridicule', 'masculine', 'feminine', 'violence', 'suffering', 'dispute', 'anger', 'envy',
                 'work', 'politics', 'terrorism', 'shame', 'confusion', 'hate']
+new_emotion_list = ['love', 'ridicule', 'masculine', 'feminine', 'violence', 'anger', 'politics', 'terrorism', 'hate']
 bins_like_name = ["0", "1", "2-5", "6-100", "100"]
 bins_t_s = ["2016", "2017", "2018"]
 
@@ -27,8 +28,6 @@ for like_name in bins_like_name:
             print(year)
 
             for name in names_list:
-                if name == "right" and like_name == "0":
-                    continue
                 try:
                     with open(f"{src_path}{name}{like_name}_empath_{year}", "rb") as fp:
                         y1 = pickle.load(fp)
@@ -37,6 +36,7 @@ for like_name in bins_like_name:
                         else:
                             y2 = np.concatenate((y2, np.array(y1)))
                 except:
+                    print(name, year, like_name, "NOT OPENED")
                     continue
 
             print(y2.shape)
@@ -46,6 +46,10 @@ for like_name in bins_like_name:
             dyd_year = []
             print(y2[:, 0].shape)
             for i in range(22):
+                if emotion_list[i] not in new_emotion_list:
+                    dyd_year.append(y[-1][i])
+                    dyu_year.append(y[-1][i])
+                    continue
                 boot = bootstrap(y2[:, i])
                 c = boot(.95)
                 print(c)
@@ -71,4 +75,4 @@ for like_name in bins_like_name:
                 d[f"{emotion_list[i]}_dyd"].append(dyd[j][i])
 
         df = pd.DataFrame(d)
-        df.to_csv(f"{dst_path}{names[names_list_list.index(names_list)]}{like_name}_empath_new.csv")
+        df.to_csv(f"{dst_path}{names[names_list_list.index(names_list)]}{like_name}_empath.csv")

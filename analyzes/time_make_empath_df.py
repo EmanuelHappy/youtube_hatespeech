@@ -1,7 +1,7 @@
 import pickle
 import numpy as np
 import pandas as pd
-from bootstrap import bootstrap
+from utilities.bootstrap import bootstrap
 
 names_control = ["right-center", "center", "left", "left-center", "right"]
 names = ["Alt-right", "IDW", "Alt-lite", "control"]
@@ -9,6 +9,7 @@ names_list_list = [["Alt-right"], ["IDW"], ["Alt-lite"], names_control]
 emotion_list = ['size', 'sadness', 'independence', 'positive_emotion', 'family', 'negative_emotion', 'government',
                 'love', 'ridicule', 'masculine', 'feminine', 'violence', 'suffering', 'dispute', 'anger', 'envy',
                 'work', 'politics', 'terrorism', 'shame', 'confusion', 'hate']
+new_emotion_list = ['love', 'ridicule', 'masculine', 'feminine', 'violence', 'anger', 'politics', 'terrorism', 'hate']
 bins_t_s = ["2016", "2017", "2018"]
 
 src_path = "./../data/sentiment/values_per_year/empath/"
@@ -42,6 +43,11 @@ for names_list in names_list_list:
         dyd_year = []
         print(y2[:, 0].shape)
         for i in range(22):
+            if emotion_list[i] not in new_emotion_list:
+                dyd_year.append(y[-1][i])
+                dyu_year.append(y[-1][i])
+                continue
+
             boot = bootstrap(y2[:, i])
             c = boot(.95)
             print(c)
@@ -67,4 +73,4 @@ for names_list in names_list_list:
             d[f"{emotion_list[i]}_dyd"].append(dyd[j][i])
 
     df = pd.DataFrame(d)
-    df.to_csv(f"{dst_path}{names[names_list_list.index(names_list)]}_empath_new.csv")
+    df.to_csv(f"{dst_path}{names[names_list_list.index(names_list)]}_empath.csv")

@@ -1,7 +1,7 @@
 import pickle
 import numpy as np
 import pandas as pd
-from bootstrap import bootstrap
+from utilities.bootstrap import bootstrap
 
 names_control = ["right-center", "center", "left", "left-center", "right"]
 names = ["Alt-right", "IDW", "Alt-lite", "control"]
@@ -13,7 +13,7 @@ attributes = ['TOXICITY', 'SEVERE_TOXICITY', 'IDENTITY_ATTACK', 'INSULT', 'PROFA
 src_path = "./../data/sentiment/values_per_year/perspective/"
 dst_path = "./../data/sentiment/dataframes/perspective_df/"
 
-for names_list in names_list_list[1:]:
+for names_list in names_list_list:
     print(names_list)
     y = []
     x = bins_t_s
@@ -38,7 +38,6 @@ for names_list in names_list_list[1:]:
             else:
                 y2 = np.concatenate((y2, np.array(y3)))
 
-
         print(y2.shape)
         y.append(y2.mean(axis=0))
         dyu_year = []
@@ -46,11 +45,11 @@ for names_list in names_list_list[1:]:
         print(y2[:, 0].shape)
 
         for i in range(8):
-            if i not in [0, 2, 5]:
+            if i not in [0, 1, 2]:
                 dyd_year.append(y[-1][i])
                 dyu_year.append(y[-1][i])
                 continue
-                
+
             boot = bootstrap(y2[:, i])
             c = boot(.95)
             print(c)
@@ -77,4 +76,4 @@ for names_list in names_list_list[1:]:
             d[f"{attributes[i]}_dyd"].append(dyd[j][i])
 
     df = pd.DataFrame(d)
-    df.to_csv(f"{dst_path}{names[names_list_list.index(names_list)]}_perspective_new.csv")
+    df.to_csv(f"{dst_path}{names[names_list_list.index(names_list)]}_perspective.csv")
