@@ -90,7 +90,7 @@ def make_values_by_year(name):
 
 
 if __name__ == "__main__":
-    for number_file in range(1, 7):
-        sqlite_to_array(number_file)
-
-    make_values_by_year(args.name)
+    #for number_file in range(1, 7):
+    #    sqlite_to_array(number_file)
+         sqlite_to_array(4)
+    #make_values_by_year(args.name)

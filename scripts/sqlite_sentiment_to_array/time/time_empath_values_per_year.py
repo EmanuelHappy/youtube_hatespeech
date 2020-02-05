@@ -7,10 +7,10 @@ import argparse
 parser = argparse.ArgumentParser(description="""This script creates a new sqlite database,
                                                 based on empath scores of each youtube comment.""")
 
-parser.add_argument("--src", dest="src", type=str, default="./../../data/sqlite/empath_sqlite/",
+parser.add_argument("--src", dest="src", type=str, default="./../../../data/sqlite/empath_sqlite/",
                     help="Sqlite DataBase source of the comments.")
 
-parser.add_argument("--dst", dest="dst", type=str, default="./../../data/sentiment/values_per_year/empath/time/",
+parser.add_argument("--dst", dest="dst", type=str, default="./../../../data/sentiment/values_per_year/empath/",
                     help="Sqlite DataBase to store the empath values.")
 
 parser.add_argument("--name", dest="name", type=str, default="IDW",
@@ -20,8 +20,8 @@ args = parser.parse_args()
 
 bins_t_s = ["2006-2012", "2013-2015", "2016", "2017", "2018"]
 names_list = ["right-center", "Alt-right", "center", "right", "left", "left-center", "IDW", "Alt-lite"]
-middle_path = "./../../data/sentiment/"
-community_path = "./../../data/sentiment/community_id/time/"
+middle_path = "./../../../data/sentiment/"
+community_path = "./../../../data/sentiment/community_id/"
 
 
 def sqlite_to_array(num):
@@ -56,6 +56,16 @@ def save_arrays(num, emp_values, emp_ids, count):
         pickle.dump(tuple(np.array(emp_ids)), f, protocol=4)
     print("ID")
 
+# Values to change
+with open("./../../../data/sentiment/ids/removed_ids/change_ids.pickle", "rb") as fp:
+    changed = pickle.load(fp)
+print("changed")
+with open("./../../../data/sentiment/ids/removed_ids/remove_ids.pickle", "rb") as fp:
+    removed = pickle.load(fp)
+print("removed")
+to_change_id = []
+to_change_emp = []
+
 
 def make_values_by_year(name):
     with open(f"{community_path}{name}.pickle", "rb") as fp:
@@ -73,16 +83,29 @@ def make_values_by_year(name):
             empath = pickle.load(fp)
         with open(f"{middle_path}ids/empath_id/empath_{fname}_id", "rb") as fp:
             ide = pickle.load(fp)
-        print("perspective and id loaded")
+        print("empath", fname)
+
+        if name == "Alt-lite":
+            empath = list(empath)
+            empath.extend(to_change_emp)
+            ide = list(ide)
+            ide.extend(to_change_id)
+        t_remove = 0
 
         for i in range(len(empath)):
             if i % 1000000 == 0:
                 print(i)
             key = ide[i]
             if key in ks:
-                d_emp[ks[key]].append(empath[i])
+                if name != "Alt-lite" and key in changed:
+                    to_change_id.append(key)
+                    to_change_emp.append(empath[i])
+                elif key not in removed:
+                    d_emp[ks[key]].append(empath[i])
+                else:
+                    t_remove += 1
 
-        print(fname, len(d_emp["2018"]))
+        print(fname, "len", len(d_emp['2018']), "removed = ", t_remove, "changed = ", len(to_change_id))
 
     for i in bins_t_s:
         print(i)

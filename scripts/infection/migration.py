@@ -29,7 +29,9 @@ def add_year(year):
         values.extend(v)
 
     if len(d["Alt-right"]) <= 2:  # light
-        if len(d["Alt-lite"]) > 0 and len(d["Intellectual Dark Web"]) > 0:
+        if len(d["Alt-lite"]) > 0 and len(d["Intellectual Dark Web"]) > 0 and len(d["control"]) > 0:
+            return
+        elif len(d["Alt-lite"]) > 0 and len(d["Intellectual Dark Web"]) > 0:
             light["Alt-lite_IDW"][year].extend(values)
         elif len(d["Alt-lite"]) > 0:
             light["Alt-lite"][year].extend(values)
@@ -39,7 +41,9 @@ def add_year(year):
             light["control"][year].extend(values)
 
     elif len(d["Alt-right"]) <= 5:  # mild
-        if len(d["Alt-lite"]) > 0 and len(d["Intellectual Dark Web"]) > 0:
+        if len(d["Alt-lite"]) > 0 and len(d["Intellectual Dark Web"]) > 0 and len(d["control"]) > 0:
+            return
+        elif len(d["Alt-lite"]) > 0 and len(d["Intellectual Dark Web"]) > 0:
             mild["Alt-lite_IDW"][year].extend(values)
         elif len(d["Alt-lite"]) > 0:
             mild["Alt-lite"][year].extend(values)
@@ -49,7 +53,9 @@ def add_year(year):
             mild["control"][year].extend(values)
 
     else:  # severe
-        if len(d["Alt-lite"]) > 0 and len(d["Intellectual Dark Web"]) > 0:
+        if len(d["Alt-lite"]) > 0 and len(d["Intellectual Dark Web"]) > 0 and len(d["control"]) > 0:
+            return
+        elif len(d["Alt-lite"]) > 0 and len(d["Intellectual Dark Web"]) > 0:
             severe["Alt-lite_IDW"][year].extend(values)
         elif len(d["Alt-lite"]) > 0:
             severe["Alt-lite"][year].extend(values)
@@ -61,7 +67,7 @@ def add_year(year):
 
 c = 0
 not_comm = 0
-with open("authors_split.pickle", "rb") as fp:
+with open("authors_split_new2.pickle", "rb") as fp:
     authors = pickle.load(fp)
 
 for value in authors:
@@ -69,7 +75,8 @@ for value in authors:
     s_not = s_16 = s_17 = s_18 = False
 
     for comm in value:
-
+        if comm['timestamp'] < bins_y_s[0][0]:
+            continue
         cat = comm["category"]
 
         if cat == "Alt-right" or cat == "Alt-lite" or cat == "Intellectual Dark Web":
@@ -104,7 +111,7 @@ for value in authors:
     if c == 0:
         print(d)
     if c % 100000 == 0:
-        print("loop", c)
+        print("loop", c, len(light[community][y]), len(mild[community][y]), len(severe[community][y]))
     c += 1
 
 print("Not commented in Alt-right = ", not_comm)
